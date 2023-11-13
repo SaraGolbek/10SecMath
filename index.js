@@ -3,6 +3,7 @@ $(document).ready(function(){
   var interval;
   var timeLeft = 10;
   var score = 0;
+  var highScore = 0;
 
   var updateTimeLeft = function (amount) {
     timeLeft += amount;
@@ -13,6 +14,13 @@ $(document).ready(function(){
     score += amount;
     $('#score').text(score);
   };
+
+  var updateHighScore = function () {
+    highScore = score;
+    $('#highScore').text(highScore);
+  }
+
+ 
 
   var startGame = function () {
     if (!interval) {
@@ -37,7 +45,7 @@ $(document).ready(function(){
   var questionGenerator = function () {
     var question = {};
     var num1 = randomNumberGenerator(10);
-    var num2 = randomNumberGenerator(10);
+    var num2 = randomNumberGenerator($(range).val());
 
     question.answer = num1 + num2;
     question.equation = String(num1) + " + " + String(num2);
@@ -56,8 +64,15 @@ $(document).ready(function(){
       $('#user-input').val('');
       updateTimeLeft(+1);
       updateScore(+1);
+      if (score > highScore) {
+        updateHighScore(score);
+      }
     }
   };
+
+  $(document).on('input', '#range', function () {
+    $('#rangeValue').html($(this).val());
+  })
 
   $('#user-input').on('keyup', function () {
     startGame();
